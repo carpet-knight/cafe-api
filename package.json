@@ -5,9 +5,11 @@
   "license": "MIT",
   "dependencies": {
     "bcrypt": "^5.0.0",
+    "connect-mongo": "^4.2.2",
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
-    "jsonwebtoken": "^8.5.1",
+    "express-session": "^1.17.1",
+    "joi": "^17.4.0",
     "mongoose": "^5.11.17"
   },
   "devDependencies": {
