@@ -53,6 +53,14 @@ class UnauthorizedError extends ClientError {
   }
 }
 
+class ForbiddenError extends ClientError {
+  constructor(message = 'No permission to perform the requested operation') {
+    super(message);
+    this.status = 403;
+    this.type = 'Forbidden';
+  }
+}
+
 class NotFoundError extends ClientError {
   constructor(message = 'Requested Resource Not Found') {
     super(message);
@@ -73,6 +81,7 @@ module.exports = {
   ClientError,
   BadRequestError,
   UnauthorizedError,
+  ForbiddenError,
   NotFoundError,
   MethodNotAllowedError,
   ServerError
