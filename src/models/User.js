@@ -5,14 +5,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 2,
-    maxlength: 127
+    maxlength: 128
   },
   login: {
     type: String,
     required: true,
     unique: true,
     minlength: 2,
-    maxlength: 127
+    maxlength: 128
   },
   password: {
     type: String,
