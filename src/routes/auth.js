@@ -54,7 +54,7 @@ router.route('/login')
 // route:api/logout
 router.route('/logout')
   .post([
-    auth()
+    auth(['admin', 'manager', 'employee', 'customer'])
   ],
     (req, res, next) => {
       req.session.destroy(err => {
