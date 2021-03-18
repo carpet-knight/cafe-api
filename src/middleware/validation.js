@@ -1,9 +1,7 @@
-const ash = require('express-async-handler');
-
 const { BadRequestError } = require('../utils/errors');
 
 
-module.exports = (property, schema) => ash(async (req, res, next) => {
+module.exports = (property, schema) => async (req, res, next) => {
   try {
     req[property] = await schema.validateAsync(req[property]);
   } catch (error) {
@@ -11,4 +9,4 @@ module.exports = (property, schema) => ash(async (req, res, next) => {
   }
 
   next();
-});
+}
