@@ -51,9 +51,19 @@ const schemas = {
       login: loginSchema.required(),
       password: passwordSchema.required(),
       role: roleSchema.required()
-    })
+    }),
+    updateSchema: Joi.object({
+      name: nameSchema,
+      password: passwordSchema,
+      role: roleSchema
+    }).min(1)
   },
-  querySchema
+  db: {
+    query: querySchema,
+    objectId: Joi.object({
+      id: Joi.string().regex(/^[0-9a-fA-F]{24}$/)
+    })
+  }
 }
 
 module.exports = schemas;
