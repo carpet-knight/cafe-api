@@ -1,7 +1,7 @@
 const DEFAULT_LIMIT = 20;
 const DEFAULT_OFFSET = 0;
 
-function _parseQuery(query, mapTypes, allowedFields) {
+function _parseFilter(query, allowedFields) {
   const dbQuery = {};
 
   for (const field in query) {
@@ -12,24 +12,7 @@ function _parseQuery(query, mapTypes, allowedFields) {
     dbQuery[fieldTrimmed] = query[field];
   }
 
-  if (!mapTypes) return dbQuery;
-
-  // mapping types to values
-  for (const [field, type] of Object.entries(mapTypes)) {
-    const value = dbQuery[field];
-
-    if (!value) return;
-
-    if (typeof value === 'object') {
-      for (const [f, v] of Object.entries(value)) {
-        value[f] = type(v);
-      }
-    } else {
-      dbQuery[field] = type(value);
-    }
-
-    return dbQuery;
-  }
+  return dbQuery;
 }
 
 function _parseProjection(query, allowedFields) {
@@ -79,16 +62,15 @@ function _parseOptions(query, allowedFields) {
 }
 
 module.exports = ({
-  parseQuery = true,
+  parseFilter = true,
   parseProjection = true,
   parseOptions = true,
-  mapTypes = null,
   allowedFields
 }) => (req, res, next) => {
   const query = req.query;
 
   req.dbQuery = {
-    query: parseQuery ? _parseQuery(query, mapTypes, allowedFields) : null,
+    filter: parseFilter ? _parseFilter(query, allowedFields) : null,
     projection: parseProjection ? _parseProjection(query, allowedFields) : null,
     options: parseOptions ? _parseOptions(query, allowedFields) : null
   }
