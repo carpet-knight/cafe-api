@@ -4,17 +4,37 @@ const ash = require('express-async-handler');
 
 const { User } = require('../models');
 const { BadRequestError } = require('../utils/errors');
-const { user: userSchemas } = require('../utils/schemas');
+const { getSchemaFields } = require('../utils/helpers');
 const { notAllowedHandler } = require('../middleware/errorHandlers');
 const auth = require('../middleware/auth');
+const schemas = require('../utils/schemas');
+const dbQuery = require('../middleware/dbQuery');
 const validate = require('../middleware/validation');
 
 const router = Router();
 
 router.route('/')
+  .get([
+    auth(),
+    validate('query', schemas.querySchema),
+    dbQuery({
+      allowedFields: getSchemaFields(User.schema, ['__v', 'password'])
+    })
+  ],
+    ash(async (req, res) => {
+      const dbQuery = req.dbQuery;
+      const users = await User.find(
+        dbQuery.query,
+        dbQuery.projection || 'name login role',
+        dbQuery.options
+      );
+
+      return res.json({ status: 200, type: 'OK', data: users });
+    })
+  )
   .post([
     auth(),
-    validate('body', userSchemas.creationSchema)
+    validate('body', schemas.user.creationSchema)
   ],
     ash(async (req, res) => {
       const {
@@ -44,7 +64,8 @@ router.route('/')
       return res
         .status(201)
         .json({ status: 201, type: 'Created' });
-    }))
+    })
+  )
   .all(notAllowedHandler);
 
 module.exports = router;

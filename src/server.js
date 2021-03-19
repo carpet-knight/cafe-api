@@ -56,6 +56,7 @@ mongoose.connect(DB_URI, mongoOptions)
 
     // api routes
     app.use('/api', require('./routes/auth'));
+    app.use('/api/users', require('./routes/users'));
 
     // error handling
     app.use(notFoundHandler);
