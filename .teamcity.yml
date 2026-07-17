@@ -1,0 +1,25 @@
+jobs:
+  Job1:
+    name: Job 1
+    steps:
+      - type: script
+        script-content: |-
+          echo 'wow'
+          echo 'another'
+          echo 'nice'
+  Job2:
+    name: Job 2
+    dependencies:
+      - Job1
+  Job3:
+    name: Job 3
+    dependencies:
+      - Job2
+  Job4:
+    name: Job 4
+    dependencies:
+      - Job3
+  Job5:
+    name: Job 5
+    dependencies:
+      - Job4
